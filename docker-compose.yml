@@ -1,0 +1,28 @@
+version: '2'
+services:
+  maven:
+    image: maven:3.8.8-eclipse-temurin-8
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: mvn install
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=todo
+  web:
+    build: .
+    ports:
+      - 8080
+    links:
+      - db:postgresql
+
+  # db:
+  #   image: mysql:5
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=rootpwd
+  #     - MYSQL_DATABASE=todo
+  #     - MYSQL_USER=mysql
+  #     - MYSQL_PASSWORD=secret
